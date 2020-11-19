@@ -14,3 +14,12 @@
 .phpunit.result.cache
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
+
+.env
+.env.local
+
+.idea/commandlinetools/
+.idea/workspace.xml
+.idea/hotellive.iml
+.idea/php.xml
+

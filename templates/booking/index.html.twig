@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Booking index{% endblock %}
+
+{% block body %}
+    <h1>Booking index - {{ bookings }} réservations trouvées</h1>
+
+    <a class="btn btn-outline-success my-3" href="{{ path('booking') }}">Create new</a>
+
+    <span class="my-2">
+        <h2></h2>
+    </span>
+
+    {{ knp_pagination_render(articles) }}
+    <table class="table table-hover table-striped">
+        <thead>
+        <tr>
+{#            <th>Création</th>#}
+            <th>Arrivé</th>
+            <th>Départ</th>
+            <th>Chambre</th>
+            <th>Client</th>
+            <th>Commentaire</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in articles %}
+            <tr>
+{#                <td>{{ book.createdAt|date("D/M/Y") }}</td>#}
+                <td>{{ book.startDate|date("d D M Y") }}</td>
+                <td>{{ book.endDate|date("d D M Y") }}</td>
+                <td>{{ book.room.id }}</td>
+                <td>{{ book.customer.id }}</td>
+                <td>{{ book.comment }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ knp_pagination_render(articles) }}
+{% endblock %}

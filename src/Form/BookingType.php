@@ -29,6 +29,9 @@ class BookingType extends AbstractType
             ->add('comment', TextareaType::class, [
                 'required' => false
                 ])
+//            ->add('customer', CustomerType::class, [
+//                'BookingType' => ''
+//            ])
             ->add('customer', EntityType::class, [
                 'class' => Customer::class,
                 //par on a surchargé la méthode __toString() dans Customer Entity
@@ -38,8 +41,11 @@ class BookingType extends AbstractType
             ])
             ->add('room', EntityType::class, [
                 'class' => Room::class,
-//                'choice_label' => 'number',
-                'choice_value' => 'id'
+                'choice_label' => 'number',
+                'choice_value' => 'id',
+                'choice_attr' => function($choice, $key, $value){
+                    return ['data-price' => $choice->getPrice()];
+                }
             ])
             ->add('Enregistrer', SubmitType::class, [
                 'attr' => ['class' => 'btn-outline-success']

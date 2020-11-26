@@ -42,6 +42,7 @@ class BookingController extends AbstractController
     /**
      * @Route("/create", name="booking")
      * @param Request $request
+     * @param BookingRepository $bookingRepository
      * @return Response
      */
     public function show(Request $request, BookingRepository $bookingRepository): Response

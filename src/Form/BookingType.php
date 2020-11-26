@@ -20,6 +20,7 @@ class BookingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->add('customer', CustomerType::class)
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text'
             ])
@@ -28,17 +29,14 @@ class BookingType extends AbstractType
             ])
             ->add('comment', TextareaType::class, [
                 'required' => false
-                ])
-//            ->add('customer', CustomerType::class, [
-//                'BookingType' => ''
-//            ])
-            ->add('customer', EntityType::class, [
-                'class' => Customer::class,
-                //par on a surchargé la méthode __toString() dans Customer Entity
-//                'choice_label' => 'lastname',
-                //pas obligatoire car par défaut c'est l'id
-//                'choice_value' => 'id'
             ])
+//            ->add('customer', EntityType::class, [
+//                'class' => Customer::class,
+//                //par on a surchargé la méthode __toString() dans Customer Entity
+////                'choice_label' => 'lastname',
+//                //pas obligatoire car par défaut c'est l'id
+////                'choice_value' => 'id'
+//            ])
             ->add('room', EntityType::class, [
                 'class' => Room::class,
                 'choice_label' => 'number',

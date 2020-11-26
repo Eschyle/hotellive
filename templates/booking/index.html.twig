@@ -30,8 +30,12 @@
                 <td>{{ book.startDate|date("d D M Y") }}</td>
                 <td>{{ book.endDate|date("d D M Y") }}</td>
                 <td>{{ book.room.id }}</td>
-                <td>{{ book.customer.id }}</td>
+                <td>{{ book.customer.email }}</td>
                 <td>{{ book.comment }}</td>
+                <td class="bs-component">
+                    <a class="btn btn-outline-primary" href="{{ path('booking_show', {'id': book.id}) }}">show</a>
+{#                    <a class="btn btn-outline-warning" href="{{ path('user_edit', {'id': book.id}) }}">edit</a>#}
+                </td>
             </tr>
         {% else %}
             <tr>

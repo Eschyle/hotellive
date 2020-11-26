@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>Réservation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Arrivé</th>
+                <td>{{ booking.startDate|date("d D M Y") }}</td>
+            </tr>
+            <tr>
+                <th>Départ</th>
+                <td>{{ booking.endDate|date("d D M Y") }}</td>
+            </tr>
+            <tr>
+                <th>Chambre</th>
+                <td>{{ booking.room.id }} - {{ booking.room.name }}</td>
+            </tr>
+            <tr>
+                <th>Client</th>
+                <td>{{ booking.customer.id }} - {{ booking.customer.firstname }} {{ booking.customer.lastname }}</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>{{ booking.comment }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-primary" href="{{ path('booking_index') }}">back to list</a>
+
+{#    <a class="btn btn-outline-warning" href="{{ path('user_edit', {'id': user.id}) }}">edit</a>#}
+
+{#    {{ include('user/_delete_form.html.twig') }}#}
+{% endblock %}

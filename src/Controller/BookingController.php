@@ -45,7 +45,7 @@ class BookingController extends AbstractController
      * @param BookingRepository $bookingRepository
      * @return Response
      */
-    public function show(Request $request, BookingRepository $bookingRepository): Response
+    public function create(Request $request, BookingRepository $bookingRepository): Response
     {
         $booking = new Booking();
         $form = $this->createForm(BookingType::class, $booking);
@@ -70,6 +70,16 @@ class BookingController extends AbstractController
 
         return $this->render('booking/booking.html.twig', [
             'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="booking_show")
+     * @return Response
+     */
+    public function show(Booking $booking){
+        return $this->render('booking/show.html.twig', [
+            'booking' => $booking,
         ]);
     }
 }

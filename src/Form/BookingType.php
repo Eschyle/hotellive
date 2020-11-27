@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\DateTime;
+use DateTime;
 
 class BookingType extends AbstractType
 {
@@ -41,9 +41,6 @@ class BookingType extends AbstractType
                     return ['data-price' => $choice->getPrice()];
                 }
             ])
-//            ->add('startDate', DateType::class, [
-//                'widget' => 'single_text'
-//            ])
             ->add('startDate', TextType::class, [
                 'label' => 'Date d\'arrivée',
                 'attr' => ['disabled' => true]
@@ -70,9 +67,9 @@ class BookingType extends AbstractType
                 $booking = $event->getData();
                 $form = $event->getForm();
 
-                dump($booking);
                 $startDateString = $booking['startDate'];
-                $date = \DateTime::createFromFormat('Y-m-d', $startDateString);
+//                $date = DateTime::createFromFormat('d-m-Y', $startDateString);
+                $date = DateTime::createFromFormat('Y-m-d', $startDateString);
                 $booking['startDate'] = $date;
             });
         $builder->get('startDate')

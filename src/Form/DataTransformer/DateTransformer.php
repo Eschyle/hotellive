@@ -16,7 +16,8 @@ class DateTransformer implements DataTransformerInterface{
         if ($date === NULL){
             return '';
         }
-        return $date->format('d-m-Y');
+        return $date->format('Y-m-d');
+//        return $date->format('d-m-Y');
     }
 
     /**
@@ -28,7 +29,8 @@ class DateTransformer implements DataTransformerInterface{
         if ($dateString === NULL){
             throw new TransformationFailedException();
         }
-        $date = DateTime::createFromFormat('Y-m-d', $dateString);
+//        $date = DateTime::createFromFormat('Y-m-d', $dateString);
+        $date = DateTime::createFromFormat('d/m/Y', $dateString);
         if ($date === false) {
             throw new TransformationFailedException('Format de date incorrect');
         }

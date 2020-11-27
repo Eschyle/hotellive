@@ -7,11 +7,10 @@ use App\Entity\Room;
 use App\Form\BookingType;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
-use App\Repository\RoomRepository;
-use DateTime;
+use DatePeriod;
+use DateInterval;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,37 +99,16 @@ class BookingController extends AbstractController
         foreach ($bookings as $booking) {
             $startDate = $booking->getStartDate();
             $endDate = $booking->getEndDate();
-            $interval = new \DateInterval('P1D');
-            $period = new \DatePeriod($startDate, $interval, $endDate);
+            $interval = new DateInterval('P1D');
+            $endDate->add($interval);
+            $period = new DatePeriod($startDate, $interval, $endDate);
             foreach ($period as $date) {
                 $unavailableDates[] = $date->format('d/m/Y');
+//                $unavailableDates[] = $date->format('Y/m/d');
             }
         }
         return new JsonResponse($unavailableDates);
     }
-
-//    /**
-//     * @param [type] $start
-//     * @param [type] $end
-//     * @param string $format
-//     * @return void
-//     */
-//    private function getDatesFromRange($start, $end, $format = 'Y-m-d') {
-//        // Declare an empty array
-//        $arrayDate = [];
-//        // Variable that store the date interval
-//        // of period 1 day
-//        $interval = new DateInterval('P1D');
-//        $realEnd = new DateTime($end);
-//        $realEnd->add($interval);
-//        $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
-//        // Use loop to store date into array
-//        foreach($period as $date) {
-//            $arrayDate[] = $date->format($format);
-//        }
-//        // Return the array elements
-//        return $arrayDate;
-//    }
 
     /**
      * @Route("/{id}", name="booking_show")

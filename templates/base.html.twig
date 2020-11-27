@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link  rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -21,7 +22,7 @@
             {% block body %}{% endblock %}
         </div>
         <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/jquery.min.js"></script>
+        <script src="/js/jquery3.5.1.min.js"></script>
         <script src="/js/popper.min.js"></script>
         {% block javascripts %}{% endblock %}
     </body>

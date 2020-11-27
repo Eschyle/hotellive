@@ -3,8 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\Booking;
+use App\Entity\Room;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\DateType;
 use Doctrine\Persistence\ManagerRegistry;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use Symfony\Component\Validator\Constraints\DateTime;
+use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method Booking|null find($id, $lockMode = null, $lockVersion = null)
@@ -45,6 +50,29 @@ class BookingRepository extends ServiceEntityRepository
 //        dd($queryBuiler->getQuery()->getSQL());
         $result = $queryBuiler->getQuery()->getResult();
         return count($result) == 0;
+    }
+
+    /**
+     * @param Room $room
+     * @param BookingRepository $bookingRepository
+     * @return array
+     */
+    public function getBookingsUnavailable(Room $room, BookingRepository $bookingRepository){
+        $queryBuilder = $bookingRepository->createQueryBuilder('bk');
+        $bookings = $queryBuilder
+            ->join('bk.room', 'rm')
+            ->andWhere('rm.id = :roomId')
+            ->setParameter('roomId', $room->getId())
+            ->andWhere(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->andX('bk.startDate >= :today'),
+                    $queryBuilder->expr()->andX('bk.endDate >= :today')
+                )
+            )->setParameter('today', new \DateTime())
+            ->addOrderBy('bk.startDate', 'ASC')
+            ->getQuery()
+            ->getResult();
+        return $bookings;
     }
 
     // /**

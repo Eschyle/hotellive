@@ -9,13 +9,43 @@
 
 {#{% endblock %}#}
 {% block body %}
-    {{ form(form) }}
+{#    {{ form(form) }}#}
+    {{ form_start(form) }}
+        {{ form_widget(form.customer) }}
+
+    {{ form_label(form.room) }}
+    {{ form_widget(form.room) }}
+
+        {{ form_label(form.startDate) }}
+        <div class="input-group date" id="startDate" data-provide="datepicker">
+            {{ form_widget(form.startDate) }}
+            <div class="input-group-addon">
+                <span class="glyphicon glyphicon-th"></span>
+            </div>
+        </div>
+
+        {{ form_label(form.endDate) }}
+            <div class="input-group date" id="endDate" data-provide="datepicker">
+                {{ form_widget(form.endDate) }}
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+            </div>
+
+        {{ form_label(form.comment) }}
+        {{ form_widget(form.comment) }}
+    {{ form_end(form) }}
     <div class="my-3">
         <p><span id="nbNight">...</span> nuit(s) à <span id="roomPrice">...</span> &euro; pour un total de <span id="total">...</span> &euro;</p>
     </div>
 {% endblock %}
 
+{% block stylesheets %}
+    <link  rel="stylesheet" href="/css/bootstrap-datepicker.min.css">
+{% endblock %}
+
 {% block javascripts %}
+    <script src="/js/bootstrap-datepicker.min.js"></script>
     <script>
         const dayDuration = 24 * 60 *60 * 1000;
         let calculate = function () {
@@ -32,8 +62,39 @@
             }
         }
 
+        let dateInspoByRoom = function(event){
+            $('#{{form.startDate.vars.id}}').removeAttr("disabled");
+            $('#{{form.endDate.vars.id}}').removeAttr("disabled");
+            let id = $('#{{form.room.vars.id}} option:selected').val();
+            let route = "unavailable/"+id;
+            console.log(route);
+            $.ajax({
+                url: route,
+                type: 'GET',
+                success: function (data, statut) {
+                    console.log(data);
+                    $('#startDate').datepicker('setDatesDisabled', data);
+                    $('#endDate').datepicker('setDatesDisabled', data);
+                },
+                error: function (resultat, statut, error){
+                    console.log(resultat);
+                }
+            });
+        }
+
+        $('#{{form.room.vars.id}}').on('change',dateInspoByRoom);
         $('#{{form.room.vars.id}}').on('change',calculate);
         $('#{{form.startDate.vars.id}}').on('change',calculate);
         $('#{{form.endDate.vars.id}}').on('change',calculate);
+
+        $('.date').datepicker({
+            format: 'dd/mm/yyyy',
+            // format: 'yyyy-mm-dd',
+            startDate: new Date,
+            autoclose: true
+        });
+        $(document).ready(function (){
+            dateInspoByRoom()
+        })
     </script>
 {% endblock %}

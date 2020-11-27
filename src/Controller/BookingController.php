@@ -3,11 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Entity\Room;
 use App\Form\BookingType;
 use App\Repository\BookingRepository;
+use App\Repository\CustomerRepository;
+use App\Repository\RoomRepository;
 use DateTime;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\DateIntervalType;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -45,7 +50,7 @@ class BookingController extends AbstractController
      * @param BookingRepository $bookingRepository
      * @return Response
      */
-    public function create(Request $request, BookingRepository $bookingRepository): Response
+    public function create(Request $request, BookingRepository $bookingRepository, CustomerRepository $customerRepository): Response
     {
         $booking = new Booking();
         $form = $this->createForm(BookingType::class, $booking);
@@ -56,6 +61,15 @@ class BookingController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()){
             $check = $bookingRepository->checkRoomIsAvailable($booking);
             if ($check){
+                //check customer exist
+                $customer = $customerRepository->findOneBy([
+                    'email' => $booking->getCustomer()->getEmail()
+                ]);
+                if ($customer) {
+                    $booking->setCustomer($customer);
+                    $this->addFlash('warning', 'l\'email renseigné existe déjà pour un utilisateur');
+                }
+                //save
                 $manager = $this->getDoctrine()->getManager();
                 $manager->persist($booking);
                 $manager->flush();
@@ -72,6 +86,51 @@ class BookingController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route ("/unavailable/{id}", name="unavailable_rooms", methods={"GET"})
+     * @param Room $room
+     * @param BookingRepository $bookingRepository
+     * @return Response
+     */
+    public function getUnavailableDatesByRom(Room $room, BookingRepository $bookingRepository) {
+        $bookings = $bookingRepository->getBookingsUnavailable($room, $bookingRepository);
+        $unavailableDates = [];
+        /** @var Booking $booking */
+        foreach ($bookings as $booking) {
+            $startDate = $booking->getStartDate();
+            $endDate = $booking->getEndDate();
+            $interval = new \DateInterval('P1D');
+            $period = new \DatePeriod($startDate, $interval, $endDate);
+            foreach ($period as $date) {
+                $unavailableDates[] = $date->format('d/m/Y');
+            }
+        }
+        return new JsonResponse($unavailableDates);
+    }
+
+//    /**
+//     * @param [type] $start
+//     * @param [type] $end
+//     * @param string $format
+//     * @return void
+//     */
+//    private function getDatesFromRange($start, $end, $format = 'Y-m-d') {
+//        // Declare an empty array
+//        $arrayDate = [];
+//        // Variable that store the date interval
+//        // of period 1 day
+//        $interval = new DateInterval('P1D');
+//        $realEnd = new DateTime($end);
+//        $realEnd->add($interval);
+//        $period = new DatePeriod(new DateTime($start), $interval, $realEnd);
+//        // Use loop to store date into array
+//        foreach($period as $date) {
+//            $arrayDate[] = $date->format($format);
+//        }
+//        // Return the array elements
+//        return $arrayDate;
+//    }
 
     /**
      * @Route("/{id}", name="booking_show")

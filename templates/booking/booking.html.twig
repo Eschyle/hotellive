@@ -34,9 +34,9 @@
 
         {{ form_label(form.startDate) }}
         {{ form_label(form.endDate) }}
-        <div class="input-group input-daterange">
+        <div class="input-group input-daterange" id="daterange">
             {{ form_widget(form.startDate) }}
-            <div class="input-group-addon"> à </div>
+{#            <div class="input-group-addon"> à </div>#}
             {{ form_widget(form.endDate) }}
         </div>
         {{ form_label(form.comment) }}
@@ -79,7 +79,13 @@
             $('#{{form.startDate.vars.id}}').attr("disabled", 'disabled');
             $('#{{form.endDate.vars.id}}').attr("disabled", 'disabled');
             let id = $('#{{form.room.vars.id}} option:selected').val();
-            let route = "unavailable/"+id;
+            let dateStart;
+            if ($('#{{form.startDate.vars.id}}').val()) {
+                let date = $('#{{ form.startDate.vars.id }}').val().split('/').reverse().join('-');
+                dateStart = Date.parse(date)/1000;
+            }
+            else dateStart = Date.now();
+            let route = "unavailable/"+id+"/"+dateStart;
             $.ajax({
                 url: route,
                 type: 'GET',
@@ -89,16 +95,18 @@
                     // $('#endDate').datepicker('setDatesDisabled', data);
                     //pour le daterange
                     $('.input-daterange input').each(function(){$(this).datepicker('setDatesDisabled', data)});
+                    $('#{{form.endDate.vars.id}}').datepicker('setEndDate', data[0]);
                     $('#{{form.startDate.vars.id}}').removeAttr("disabled");
                     $('#{{form.endDate.vars.id}}').removeAttr("disabled");
                 },
                 error: function (resultat, statut, error){
-                    console.log(resultat);
+                    console.error(resultat);
                 }
             });
         }
 
         $('#{{form.room.vars.id}}').on('change',dateInspoByRoom);
+        $('#{{form.startDate.vars.id}}').on('change',dateInspoByRoom);
         $('#{{form.room.vars.id}}').on('change',calculate);
         $('#{{form.startDate.vars.id}}').on('change',calculate);
         $('#{{form.endDate.vars.id}}').on('change',calculate);
@@ -111,14 +119,17 @@
         //     autoclose: true
         // });
 
-        //pour le daterange
+        //pour les deux daterange
         $('.input-daterange input').each(function() {
-            // $(this).datepicker('clearDates');
             $(this).datepicker({
                 format: 'dd/mm/yyyy',
                 startDate: new Date,
-                autoclose: true
+                autoclose: true,
+                weekStart: 1,
             });
+        });
+        $('#daterange').datepicker({
+            inputs: $('.daterange')
         });
 
         $(document).ready(function (){

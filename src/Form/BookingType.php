@@ -43,13 +43,13 @@ class BookingType extends AbstractType
             ])
             ->add('startDate', TextType::class, [
                 'label' => 'Date d\'arrivée',
-                'label_attr' => ['class' => 'col-6'],
-                'attr' => ['disabled' => true, 'class' => 'form-control']
+                'label_attr' => ['class' => 'col-6 text-center'],
+                'attr' => ['disabled' => true, 'class' => 'daterange']
             ])
             ->add('endDate', TextType::class, [
                 'label' => 'Date de départ',
-                'label_attr' => ['class' => 'col-5'],
-                'attr' => ['disabled' => true, 'class' => 'form-control']
+                'label_attr' => ['class' => 'col-5 text-center'],
+                'attr' => ['disabled' => true, 'class' => 'daterange']
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
@@ -78,6 +78,8 @@ class BookingType extends AbstractType
             ->addModelTransformer($this->dateTransformer);
         $builder->get('endDate')
             ->addModelTransformer($this->dateTransformer);
+
+        //rajouté dan le dataTransformer
 //            ->addModelTransformer(new CallbackTransformer(
 //                function ($date) {
 //                    if ($date){

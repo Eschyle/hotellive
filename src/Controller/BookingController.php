@@ -7,6 +7,7 @@ use App\Entity\Room;
 use App\Form\BookingType;
 use App\Repository\BookingRepository;
 use App\Repository\CustomerRepository;
+use Cassandra\Date;
 use DatePeriod;
 use DateInterval;
 use Knp\Component\Pager\PaginatorInterface;
@@ -91,13 +92,14 @@ class BookingController extends AbstractController
     }
 
     /**
-     * @Route ("/unavailable/{id}", name="unavailable_rooms", methods={"GET"})
+     * @Route ("/unavailable/{id}/{dateStart}", name="unavailable_rooms", methods={"GET"})
      * @param Room $room
+     * @param string $dateStarte
      * @param BookingRepository $bookingRepository
      * @return Response
      */
-    public function getUnavailableDatesByRom(Room $room, BookingRepository $bookingRepository) {
-        $bookings = $bookingRepository->getBookingsUnavailable($room, $bookingRepository);
+    public function getUnavailableDatesByRom(Room $room, string $dateStart, BookingRepository $bookingRepository) {
+        $bookings = $bookingRepository->getBookingsUnavailable($room->getId(), $dateStart, $bookingRepository);
         $unavailableDates = [];
         /** @var Booking $booking */
         foreach ($bookings as $booking) {

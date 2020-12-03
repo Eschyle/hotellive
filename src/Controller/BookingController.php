@@ -43,7 +43,9 @@ class BookingController extends AbstractController
             'align' => 'center',
             'size' => 'small'
         ]);
+        dump($articles);
         return $this->render('booking/index.html.twig', [
+            'books' => $bookings,
             'bookings' => $articles,
         ]);
     }

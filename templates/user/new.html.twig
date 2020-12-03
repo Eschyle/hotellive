@@ -2,10 +2,28 @@
 
 {% block title %}New User{% endblock %}
 
+
 {% block body %}
     <h1>Create new User</h1>
 
     {{ include('user/_form.html.twig') }}
 
     <a class="btn btn-outline-primary" href="{{ path('user_index') }}">back to list</a>
+{% endblock %}
+
+{% block stylesheets %}
+    <link  rel="stylesheet" href="/css/select2.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/select2.full.min.js"></script>
+    <script src="/js/select2.fr.min.js"></script>
+    <script>
+        $(document).ready(function (){
+            $('select').select2({
+                language: "fr",
+                // theme: "bootstrap4"
+            });
+        });
+    </script>
 {% endblock %}

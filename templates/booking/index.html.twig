@@ -3,7 +3,7 @@
 {% block title %}Booking index{% endblock %}
 
 {% block body %}
-    <h1>Booking index - {{ bookings }} réservations trouvées</h1>
+    <h1>Booking index - {{ bookings|length }} réservations trouvées</h1>
 
     <a class="btn btn-outline-success my-3" href="{{ path('booking') }}">Create new</a>
 
@@ -11,25 +11,25 @@
         <h2></h2>
     </span>
 
-    {{ knp_pagination_render(articles) }}
+    {{ knp_pagination_render(bookings) }}
     <table class="table table-hover table-striped">
         <thead>
         <tr>
-{#            <th>Création</th>#}
             <th>Arrivé</th>
             <th>Départ</th>
             <th>Chambre</th>
             <th>Client</th>
             <th>Commentaire</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        {% for book in articles %}
+        {% for book in bookings %}
             <tr>
-{#                <td>{{ book.createdAt|date("D/M/Y") }}</td>#}
                 <td>{{ book.startDate|date("d D M Y") }}</td>
+{#                <td>{{ book.startDate|format_datetime(locale='fr',pattern="EEEE dd MMMM YYYY")  }}</td>#}
                 <td>{{ book.endDate|date("d D M Y") }}</td>
-                <td>{{ book.room.id }}</td>
+                <td>{{ book.room.id }} - {{ book.room.name }}</td>
                 <td>{{ book.customer.email }}</td>
                 <td>{{ book.comment }}</td>
                 <td class="bs-component">
@@ -44,5 +44,5 @@
         {% endfor %}
         </tbody>
     </table>
-    {{ knp_pagination_render(articles) }}
+    {{ knp_pagination_render(bookings) }}
 {% endblock %}

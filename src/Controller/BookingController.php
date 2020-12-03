@@ -37,9 +37,13 @@ class BookingController extends AbstractController
             $request->query->getInt('page', 1),
             25
         );
+
+        $articles->setCustomParameters([
+            'align' => 'center',
+            'size' => 'small'
+        ]);
         return $this->render('booking/index.html.twig', [
-            'bookings' => count($bookings),
-            'articles' => $articles,
+            'bookings' => $articles,
         ]);
     }
 

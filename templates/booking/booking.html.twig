@@ -9,33 +9,40 @@
 
 {#{% endblock %}#}
 {% block body %}
-{#    {{ form(form) }}#}
+    <a class="btn btn-outline-info my-3" href="{{ path('booking_index') }}">&leftarrow; Retour</a>
     {{ form_start(form) }}
         {{ form_widget(form.customer) }}
 
     {{ form_label(form.room) }}
     {{ form_widget(form.room) }}
 
+{#        {{ form_label(form.startDate) }}#}
+{#        <div class="input-group date" id="startDate" data-provide="datepicker">#}
+{#            {{ form_widget(form.startDate) }}#}
+{#            <div class="input-group-addon">#}
+{#                <span class="glyphicon glyphicon-th"></span>#}
+{#            </div>#}
+{#        </div>#}
+
+{#        {{ form_label(form.endDate) }}#}
+{#            <div class="input-group date" id="endDate" data-provide="datepicker">#}
+{#                {{ form_widget(form.endDate) }}#}
+{#                <div class="input-group-addon">#}
+{#                    <span class="glyphicon glyphicon-th"></span>#}
+{#                </div>#}
+{#            </div>#}
+
         {{ form_label(form.startDate) }}
-        <div class="input-group date" id="startDate" data-provide="datepicker">
-            {{ form_widget(form.startDate) }}
-            <div class="input-group-addon">
-                <span class="glyphicon glyphicon-th"></span>
-            </div>
-        </div>
-
         {{ form_label(form.endDate) }}
-            <div class="input-group date" id="endDate" data-provide="datepicker">
-                {{ form_widget(form.endDate) }}
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-th"></span>
-                </div>
-            </div>
-
+        <div class="input-group input-daterange">
+            {{ form_widget(form.startDate) }}
+            <div class="input-group-addon"> à </div>
+            {{ form_widget(form.endDate) }}
+        </div>
         {{ form_label(form.comment) }}
         {{ form_widget(form.comment) }}
     {{ form_end(form) }}
-    <div class="my-3">
+    <div class="alert alert-secondary" id="resumeTarif" hidden>
         <p><span id="nbNight">...</span> nuit(s) à <span id="roomPrice">...</span> &euro; pour un total de <span id="total">...</span> &euro;</p>
     </div>
 {% endblock %}
@@ -54,15 +61,14 @@
     <script>
         const dayDuration = 24 * 60 *60 * 1000;
         let calculate = function () {
-            const startDate = new Date($('#{{form.startDate.vars.id}}').val());
-            const endDate = new Date($('#{{form.endDate.vars.id}}').val());
-            {#const startDate = new Date($('#{{form.startDate.vars.id}}').val().split('/').reverse().join('-'));#}
-            {#const endDate = new Date($('#{{form.endDate.vars.id}}').val().split('/').reverse().join('-'));#}
+            const startDate = new Date($('#{{form.startDate.vars.id}}').val().split('/').reverse().join('-'));
+            const endDate = new Date($('#{{form.endDate.vars.id}}').val().split('/').reverse().join('-'));
             const price = $('#{{form.room.vars.id}} option:selected').attr('data-price');
             if (price && startDate && endDate && startDate < endDate) {
                 const interval = endDate.getTime() - startDate.getTime();
                 const nbNight = interval / dayDuration;
-                const total = Math.round(nbNight * price);
+                const total = nbNight * price;
+                $('#resumeTarif').removeAttr('hidden');
                 $('#nbNight').text(nbNight);
                 $('#roomPrice').text(price);
                 $('#total').text(total.toLocaleString('fr-FR'));
@@ -78,8 +84,11 @@
                 url: route,
                 type: 'GET',
                 success: function (data, statut) {
-                    $('#startDate').datepicker('setDatesDisabled', data);
-                    $('#endDate').datepicker('setDatesDisabled', data);
+                    //pour les deux datepickes
+                    // $('#startDate').datepicker('setDatesDisabled', data);
+                    // $('#endDate').datepicker('setDatesDisabled', data);
+                    //pour le daterange
+                    $('.input-daterange input').each(function(){$(this).datepicker('setDatesDisabled', data)});
                     $('#{{form.startDate.vars.id}}').removeAttr("disabled");
                     $('#{{form.endDate.vars.id}}').removeAttr("disabled");
                 },
@@ -94,11 +103,22 @@
         $('#{{form.startDate.vars.id}}').on('change',calculate);
         $('#{{form.endDate.vars.id}}').on('change',calculate);
 
-        $('.date').datepicker({
-            format: 'dd/mm/yyyy',
-            // format: 'yyyy-mm-dd',
-            startDate: new Date,
-            autoclose: true
+        //pour les deux datepickes
+        // $('.date').datepicker({
+        //     format: 'dd/mm/yyyy',
+        //     // format: 'yyyy-mm-dd',
+        //     startDate: new Date,
+        //     autoclose: true
+        // });
+
+        //pour le daterange
+        $('.input-daterange input').each(function() {
+            // $(this).datepicker('clearDates');
+            $(this).datepicker({
+                format: 'dd/mm/yyyy',
+                startDate: new Date,
+                autoclose: true
+            });
         });
 
         $(document).ready(function (){

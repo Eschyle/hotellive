@@ -43,11 +43,13 @@ class BookingType extends AbstractType
             ])
             ->add('startDate', TextType::class, [
                 'label' => 'Date d\'arrivée',
-                'attr' => ['disabled' => true]
+                'label_attr' => ['class' => 'col-6'],
+                'attr' => ['disabled' => true, 'class' => 'form-control']
             ])
             ->add('endDate', TextType::class, [
                 'label' => 'Date de départ',
-                'attr' => ['disabled' => true]
+                'label_attr' => ['class' => 'col-5'],
+                'attr' => ['disabled' => true, 'class' => 'form-control']
             ])
             ->add('comment', TextareaType::class, [
                 'label' => 'Commentaire',
@@ -61,7 +63,7 @@ class BookingType extends AbstractType
 ////                'choice_value' => 'id'
 //            ])
             ->add('Enregistrer', SubmitType::class, [
-                'attr' => ['class' => 'btn-outline-success']
+                'attr' => ['class' => 'btn-outline-success mt-3']
             ])
             ->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
                 $booking = $event->getData();

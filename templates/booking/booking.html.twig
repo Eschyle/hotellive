@@ -35,14 +35,18 @@
         {{ form_label(form.startDate) }}
         {{ form_label(form.endDate) }}
         <div class="input-group input-daterange" id="daterange">
+{#        <div class="input-group-addon mx-2 py-1"> du </div>#}
             {{ form_widget(form.startDate) }}
-{#            <div class="input-group-addon"> à </div>#}
+            <div class="input-group-addon mx-2 py-1"> au </div>
             {{ form_widget(form.endDate) }}
         </div>
         {{ form_label(form.comment) }}
         {{ form_widget(form.comment) }}
     {{ form_end(form) }}
     <div class="alert alert-secondary" id="resumeTarif" hidden>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
         <p><span id="nbNight">...</span> nuit(s) à <span id="roomPrice">...</span> &euro; pour un total de <span id="total">...</span> &euro;</p>
     </div>
 {% endblock %}

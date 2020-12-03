@@ -3,6 +3,7 @@
 {% block title %}User index{% endblock %}
 
 {% block body %}
+    <a class="btn btn-outline-success my-2" href="{{ path('user_new') }}">Create new</a>
     <h1>User index</h1>
 
     <table class="table table-hover table-striped">
@@ -35,6 +36,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a class="btn btn-outline-success" href="{{ path('user_new') }}">Create new</a>
 {% endblock %}

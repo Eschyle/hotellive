@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Option{% endblock %}
+
+{% block body %}
+    <a class="btn btn-outline-primary mb-3" href="{{ path('option_index') }}">retour à la liste</a>
+    <h1>Option {{ option.name }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ option.id }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ option.price|replace({'.': ','}) }}&euro;</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ option.description }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-warning my-2" href="{{ path('option_edit', {'id': option.id}) }}">edit</a>
+
+    {{ include('option/_delete_form.html.twig') }}
+{% endblock %}

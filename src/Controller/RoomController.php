@@ -6,6 +6,9 @@ use App\Entity\Room;
 use App\Form\RoomType;
 use App\Repository\RoomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,6 +38,14 @@ class RoomController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //Onn set le path de l'image
+            /** @var UploadedFile */
+            $file = $form['image']->getData();
+            if($file) {
+                $fileName = $this->setImage($file);
+                $room->setImage($fileName);
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($room);
             $entityManager->flush();
@@ -67,6 +78,14 @@ class RoomController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            //Onn set le path de l'image
+            /** @var UploadedFile */
+            $file = $form['image']->getData();
+            if($file) {
+                $fileName = $this->setImage($file);
+                $room->setImage($fileName);
+            }
+
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('room_index');
@@ -90,5 +109,14 @@ class RoomController extends AbstractController
         }
 
         return $this->redirectToRoute('room_index');
+    }
+
+    public function setImage(UploadedFile $file):string {
+        $imageName = $file->getClientOriginalName();
+        $filePath = __DIR__.'\..\..\public\upload\\';
+        $fileName = '\upload\\'.$imageName;
+        $file = $file->move($filePath, $imageName);
+        return $fileName;
+
     }
 }

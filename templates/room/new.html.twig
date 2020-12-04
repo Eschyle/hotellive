@@ -3,9 +3,18 @@
 {% block title %}New Room{% endblock %}
 
 {% block body %}
+    <a class="btn btn-outline-primary mb-3" href="{{ path('room_index') }}">back to list</a>
     <h1>Create new Room</h1>
 
     {{ include('room/_form.html.twig') }}
+{% endblock %}
 
-    <a href="{{ path('room_index') }}">back to list</a>
+{% block stylesheets %}
+    <link  rel="stylesheet" href="/css/select2.min.css">
+{% endblock %}
+
+{% block javascripts %}
+    <script src="/js/select2.full.min.js"></script>
+    <script src="/js/select2.fr.min.js"></script>
+    {{ include('room/script-refacto.html.twig') }}
 {% endblock %}

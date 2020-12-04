@@ -3,28 +3,30 @@
 {% block title %}Room index{% endblock %}
 
 {% block body %}
+    <a class="btn btn-outline-success mb-3" href="{{ path('room_new') }}">Create new</a>
+
     <h1>Room index</h1>
 
-    <table class="table">
+    <table class="table table-hover table-striped">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>Price</th>
-                <th>Number</th>
-                <th>Name</th>
-                <th>actions</th>
+                <th>Numéro</th>
+                <th>Nom de la chambre</th>
+                <th>Prix</th>
+                <th>Image</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for room in rooms %}
             <tr>
-                <td>{{ room.id }}</td>
-                <td>{{ room.price }}</td>
                 <td>{{ room.number }}</td>
                 <td>{{ room.name }}</td>
+                <td>{{ room.price|replace({'.': ','}) }}&euro;</td>
+                <td>{% if room.image %}{{ room.image|slice(9, 30) ~ '...' }}{% endif %}</td>
                 <td>
-                    <a href="{{ path('room_show', {'id': room.id}) }}">show</a>
-                    <a href="{{ path('room_edit', {'id': room.id}) }}">edit</a>
+                    <a class="btn btn-outline-primary" href="{{ path('room_show', {'id': room.id}) }}">show</a>
+                    <a class="btn btn-outline-warning" href="{{ path('room_edit', {'id': room.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -34,6 +36,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('room_new') }}">Create new</a>
 {% endblock %}

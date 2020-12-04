@@ -1,0 +1,23 @@
+
+<script>
+    console.log($('#{{ form.image.vars.id }}').val());
+    if ('#{{ form.image.vars.id }}'){
+        $('#{{ form.image.vars.id }}').attr("placeholder", $('#{{ form.image.vars.id }}').val());
+    }
+
+    let updateName = function () {
+        let imageName = $('#{{ form.image.vars.id }}').val();
+        console.log(imageName);
+        $('#{{ form.image.vars.id }}').removeAttr('placeholder');
+        $('#{{ form.image.vars.id }}').attr("placeholder", imageName);
+        $('.custom-file-input').text(imageName);
+        console.log($('.custom-file-input').val());
+    }
+    $('#{{ form.image.vars.id }}').on('change', updateName);
+
+    $(document).ready(function (){
+        $('select').select2({
+            language: "fr",
+        });
+    });
+</script>

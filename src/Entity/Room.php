@@ -44,6 +44,11 @@ class Room
      */
     private $bookings;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->options = new ArrayCollection();
@@ -146,5 +151,17 @@ class Room
     }
     public function __toString(){
         return $this->number . ' - ' . $this->name;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

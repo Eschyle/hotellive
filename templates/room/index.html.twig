@@ -23,7 +23,11 @@
                 <td>{{ room.number }}</td>
                 <td>{{ room.name }}</td>
                 <td>{{ room.price|replace({'.': ','}) }}&euro;</td>
-                <td>{% if room.image %}{{ room.image|slice(9, 30) ~ '...' }}{% endif %}</td>
+                <td>
+                    {% if room.image and room.image|length > 30 %}{{ room.image|slice(9, 30) ~ '...' }}
+                    {% elseif room.image and room.image|length < 30 %}{{ room.image }}
+                    {% endif %}
+                </td>
                 <td>
                     <a class="btn btn-outline-primary" href="{{ path('room_show', {'id': room.id}) }}">show</a>
                     <a class="btn btn-outline-warning" href="{{ path('room_edit', {'id': room.id}) }}">edit</a>

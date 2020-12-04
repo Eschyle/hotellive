@@ -1,4 +1,4 @@
-
+{{ include('inc/select2-js.html.twig') }}
 <script>
     console.log($('#{{ form.image.vars.id }}').val());
     if ('#{{ form.image.vars.id }}'){
@@ -14,10 +14,4 @@
         console.log($('.custom-file-input').val());
     }
     $('#{{ form.image.vars.id }}').on('change', updateName);
-
-    $(document).ready(function (){
-        $('select').select2({
-            language: "fr",
-        });
-    });
 </script>
